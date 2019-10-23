@@ -1,0 +1,173 @@
+#
+# Default settings for the simulation
+#
+
+## Scenario settings
+Scenario.name = default_scenario
+Scenario.simulateConnections = true
+Scenario.updateInterval = 1
+# 43k ~= 12h
+#Scenario.endTime = [21.5k;43k;64.5k;86k;107.5k;129k;150.5k]
+Scenario.endTime = 86k
+
+btInterface.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+btInterface.transmitSpeed = 250k
+btInterface.transmitRange = 10
+
+highspeedInterface.type = SimpleBroadcastInterface
+highspeedInterface.transmitSpeed = 2250k
+highspeedInterface.transmitRange = 40
+
+Scenario.nrofHostGroups = 5
+
+#SprayAndWaitRouter setting
+SprayAndWaitRouter.nrofCopies=3
+SprayAndWaitRouter.binaryMode= true
+
+#PRoPhetRouter setting
+ProphetRouter.secondsInTimeUnit=30
+
+#MaxProp setting
+MaxPropRouter。probSetMaxSize=50
+
+
+Group.bufferSize = 50M
+Group.waitTime = 0, 120
+#All nodes have the btinterface interface
+Group.movementModel = ClusterMovement
+Group.router=EpidemicRouter
+Group.nrofInterfaces = 1
+Group.interface1 = btInterface
+# walking speeds
+#Group.speed = 0.5, 1.5
+Group.msgTtl = 120
+
+#Group.nrofHosts = [5;10;15;20;25;30;35;40;45;50;55]
+#Group.nrofHosts = [5;10;15;20;25;30]
+Group.nrofHosts = 10
+
+#Group.nrofHosts=5
+Group.nrofApplications = 0
+
+# SN groups
+
+#sp1
+Group1.groupID = C1
+
+#Group1.nrofHosts=200
+#Group1.nrofApplications=0
+Group1.waitTime=0,120
+Group1.speed = 0.5, 1.5
+Group1.clusterRange = 150
+Group1.clusterCenter=650, 1100
+
+#sp2
+Group2.groupID = C2
+#Group2.nrofHosts=200
+#Group2.nrofApplications=0
+Group2.waitTime=0,120
+Group2.speed = 0.5, 1.5
+Group2.clusterRange = 150
+Group2.clusterCenter=650, 2000
+
+#stationary point
+#sp1
+Group3.groupID = B1
+Group3.nrofHosts = 1
+Group3.bufferSize = 1000M
+Group3.movementModel = StationaryMovement
+Group3.nodeLocation=650, 1100
+Group3.nrofInterfaces = 2
+Group3.interface1 = highspeedInterface
+Group3.interface2 = btInterface
+
+#sp2
+Group4.groupID = B2
+Group4.nrofHosts = 1
+Group4.bufferSize = 1000M
+Group4.movementModel = StationaryMovement
+Group4.nodeLocation=650, 2000
+Group4.nrofInterfaces = 2
+Group4.interface1 = highspeedInterface
+Group4.interface2 = btInterface
+
+#UAV point
+
+Group5.groupID = f
+Group5.bufferSize = 1000M
+Group5.movementModel = MapRouteMovement
+#Group5.routeFile = data/new/ferryroute.wkt
+Group5.routeFile = data/doubleTest/ferryroute.wkt
+Group5.routeType = 1
+Group5.waitTime = 20,20
+Group5.speed = 10, 10
+Group5.nrofHosts = 1
+Group5.nrofInterfaces = 1
+Group5.interface1 = highspeedInterface
+
+## Map based movement -movement model specific settings
+MapBasedMovement.nrofMapFiles =2
+#MapBasedMovement.mapFile1 = data/new/ferryroute.wkt
+MapBasedMovement.mapFile1 = data/doubleTest/origin.wkt
+MapBasedMovement.mapFile2 = data/doubleTest/ferryroute.wkt
+
+## Message creation parameters
+# How many event generators
+Events.nrof = 1
+# Class of the first event generator
+Events1.class = MessageEventGenerator
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events1.interval = 25,120
+# Message sizes (50kB - 150kB)
+Events1.size = 50k,1024k
+# range of message source/destination addresses
+
+#Events1.hosts=[0,50;0,60;0,70;0,80;0,90;0,100]
+Events1.hosts=0,20
+
+# Message ID prefix
+Events1.prefix = M
+
+## Movement model settings
+# seed for movement models' pseudo random number generator (default = 0)
+MovementModel.rngSeed = 1
+# World's size for Movement Models without implicit size (width, height; meters)
+MovementModel.worldSize = 3000, 4500
+# How long time to move hosts in the world before real simulation
+MovementModel.warmup = 1000
+
+# how many reports to load
+Report.nrofReports =3
+# length of the warm up period (simulated seconds)
+Report.warmup = 0
+# default directory of reports (can be overridden per Report with output setting)
+Report.reportDir = reports/
+# Report classes to load
+Report.report1 = MessageStatsReport
+Report.report2 = CreatedMessagesReport
+Report.report3 = DeliveredMessagesReport
+
+## Optimization settings -- these affect the speed of the simulation
+## see World class for details.
+Optimization.connectionAlg = 2
+Optimization.cellSizeMult = 5
+Optimization.randomizeUpdateOrder = true
+
+
+## GUI settings
+
+# GUI underlay image settings
+GUI.UnderlayImage.fileName = data/sec1.png
+# Image offset in pixels (x, y)
+GUI.UnderlayImage.offset = 64, 20
+# Scaling factor for the image
+GUI.UnderlayImage.scale = 4.75
+# Image rotation (radians)
+GUI.UnderlayImage.rotate = -0.015
+
+# how many events to show in the log panel (default = 30)
+GUI.EventLogPanel.nrofEvents = 30
+# Regular Expression log filter (see Pattern-class from the Java API for RE-matching details)
+#GUI.EventLogPanel.REfilter = .*p[1-9]<->p[1-9]$
